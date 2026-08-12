@@ -1,0 +1,19 @@
+[Unit]
+Description=Edge Environment Node Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chai
+Group=chai
+WorkingDirectory=/home/chai/Desktop/Codes/Edge_Environment
+Environment=HOME=/home/chai
+Environment=PATH=/home/chai/.nvm/versions/node/v20.20.2/bin:/home/chai/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/bin/bash -lc 'cd /home/chai/Desktop/Codes/Edge_Environment && exec npm run start'
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=0
+
+[Install]
+WantedBy=multi-user.target

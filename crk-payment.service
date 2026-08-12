@@ -1,0 +1,17 @@
+[Unit]
+Description=CRK Payment Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chai
+WorkingDirectory=/home/chai/Desktop/Codes/CRK-PAYMENT
+ExecStart=/bin/bash -c '/home/chai/.local/bin/uv run src/main.py'
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=0
+Environment=PATH=/home/chai/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

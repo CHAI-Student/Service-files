@@ -1,0 +1,38 @@
+[Unit]
+Description=CRK Model YOLO TensorRT Engine Build
+After=network-online.target
+Wants=network-online.target
+Conflicts=crk-model.service
+
+[Service]
+Type=oneshot
+User=chai
+WorkingDirectory=/
+EnvironmentFile=-/home/chai/Desktop/crk-model-build.txt
+Environment=PATH=/home/chai/Desktop/Codes/CRK-model/.engine_build_env/bin:/home/chai/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+ExecStartPre=/bin/bash -lc '[ -f /home/chai/Desktop/crk-model-build.txt ] || { echo "[BUILD][ERROR] config file not found: /home/chai/Desktop/crk-model-build.txt"; exit 20; }'
+ExecStartPre=/bin/bash -lc '[ -n "${MODEL_DIR:-}" ] || { echo "[BUILD][ERROR] MODEL_DIR is empty"; exit 21; }'
+ExecStartPre=/bin/bash -lc '[ -n "${VENV_ACTIVATE:-}" ] || { echo "[BUILD][ERROR] VENV_ACTIVATE is empty"; exit 22; }'
+ExecStartPre=/bin/bash -lc '[ -n "${MODELS_DIR:-}" ] || { echo "[BUILD][ERROR] MODELS_DIR is empty"; exit 23; }'
+ExecStartPre=/bin/bash -lc '[ -n "${PT_FILE:-}" ] || { echo "[BUILD][ERROR] PT_FILE is empty"; exit 24; }'
+ExecStartPre=/bin/bash -lc '[ -n "${ENGINE_FILE:-}" ] || { echo "[BUILD][ERROR] ENGINE_FILE is empty"; exit 25; }'
+
+ExecStartPre=/bin/bash -lc '[ -d "$MODEL_DIR" ] || { echo "[BUILD][ERROR] model directory not found: $MODEL_DIR"; exit 10; }'
+ExecStartPre=/bin/bash -lc '[ -f "$VENV_ACTIVATE" ] || { echo "[BUILD][ERROR] venv activate file not found: $VENV_ACTIVATE"; exit 11; }'
+ExecStartPre=/bin/bash -lc '[ -d "$MODELS_DIR" ] || { echo "[BUILD][ERROR] models directory not found: $MODELS_DIR"; exit 12; }'
+ExecStartPre=/bin/bash -lc '[ -f "$PT_FILE" ] || { echo "[BUILD][ERROR] pt model file not found: $PT_FILE"; exit 13; }'
+ExecStartPre=/bin/bash -lc '[ -f /home/chai/Desktop/Codes/CRK-model/.env ] || { echo "[BUILD][ERROR] .env file not found"; exit 14; }'
+
+ExecStartPre=+/home/chai/Desktop/Codes/CRK-model/stop_before_engine_build.sh
+
+ExecStart=/home/chai/Desktop/Codes/CRK-model/build_engine.sh
+
+ExecStartPost=+/home/chai/Desktop/Codes/CRK-model/reboot_after_engine_build.sh
+
+RemainAfterExit=no
+Restart=no
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
