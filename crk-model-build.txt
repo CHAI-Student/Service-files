@@ -1,0 +1,5 @@
+MODEL_DIR=/home/chai/Desktop/Codes/CRK-model
+VENV_ACTIVATE=/home/chai/Desktop/Codes/CRK-model/.engine_build_env/bin/activate
+MODELS_DIR=/home/chai/Desktop/Codes/CRK-model/models
+PT_FILE=/home/chai/Desktop/Codes/CRK-model/models/v26.5.22.pt
+ENGINE_FILE=/home/chai/Desktop/Codes/CRK-model/models/v26.5.22.engine
